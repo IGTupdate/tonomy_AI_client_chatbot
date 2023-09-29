@@ -28,13 +28,12 @@ import "@/assets/css/share.css";
 
 // Files
 import useToggle from "@/hooks/useToggle";
-import { SideMenuContext } from "@/context";
 import { wrapper } from "@/store";
 import { Provider } from "react-redux";
-import { WrappedBuildError } from "next/dist/server/base-server";
 import { store } from "../redux/store";
 
 const App = ({ Component, pageProps }: AppProps) => {
+  
   const { isOpen, onToggle } = useToggle();
 
   const value = {

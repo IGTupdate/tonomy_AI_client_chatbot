@@ -13,6 +13,32 @@ import {
 import { notification } from "antd";
 
 const ChatbotSetting = () => {
+
+  interface SendData {
+    chatbot_id: string;
+    chatbot_name: any;
+
+    base_prompt: any;
+    model: any;
+    visibility: any;
+    domain: any;
+    theme: any;
+    rate_msg: any;
+    profile_picture: any;
+    remove_profile_picture: any;
+    display_name: any;
+    rate_second: any;
+    limit_msg: any;
+    interface_init_msg: any;
+    interface_suggest_msg: any;
+    user_msg_color: any;
+    chat_icon: any;
+    remove_icon: any;
+    bubble_btn_color: any;
+    align_bubble_btn: any;
+    auto_msg_second: number | undefined;
+  }
+
   const chatbot_id = useAppSelector((state) => state.getSetting.chatbot_id);
 
   const [chatbotId, setChatbotId] = useState("");
@@ -54,13 +80,12 @@ const ChatbotSetting = () => {
     getSetting(chatbot_id)
       .then((result) => {
         const data = result.data.data;
-        console.log("data>>>>>>>>>>>>>", data.setting);
 
         setModelList(data.model);
         setVisibleList(data.visibility);
 
-        setCurrentModel(data.setting.model._id);
-        setCurrentVisibility(data.setting.visibility._id);
+        setCurrentModel(data.setting.model?._id);
+        setCurrentVisibility(data.setting.visibility?._id);
 
         setChatbotId(data.setting._id);
         setChatbotName(data.setting.chatbot_name);
@@ -83,28 +108,57 @@ const ChatbotSetting = () => {
   }, [chatbot_id]);
 
   const save_change = async () => {
-    var modelist = document.getElementById("model_select");
+    var modelist = document.getElementById("model_select") as HTMLSelectElement;
     var model = modelist?.options[modelist.selectedIndex].value;
 
-    var visibleList = document.getElementById("visibility_select");
+    var visibleList = document.getElementById(
+      "visibility_select"
+    ) as HTMLSelectElement;
 
     var visible = visibleList?.options[visibleList.selectedIndex].value;
 
-    var limitHint = document.getElementById("limithint-input").value;
+    let limitHints = document.getElementById(
+      "limithint-input"
+    ) as HTMLSelectElement;
+    let limitHint = limitHints.value;
 
     const formData = new FormData();
     //formData.append("chatbot_id", chatbot_id);
     // formData.append("profileIcon", selectedProfileIcon);
     // formData.append("chatIcon", selectedChatIcon);
 
-    let sendData = {
-      chatbot_name: document.getElementById("chatbot_name").value,
-      base_prompt: document.getElementById("base_prompt").value,
+    let chatbot_names = document.getElementById(
+      "chatbot_name"
+    ) as HTMLSelectElement;
+    let chatbot_name = chatbot_names.value;
+
+    let base_prompts = document.getElementById(
+      "base_prompt"
+    ) as HTMLSelectElement;
+    let base_prompt = base_prompts.value;
+
+    let domains = document.getElementById("domains") as HTMLSelectElement;
+    let domain = domains.value;
+
+    let rate_msgs = document.getElementById("msgLimit") as HTMLSelectElement;
+    let rate_msg = rate_msgs.value;
+
+    let rate_seconds = document.getElementById(
+      "timeLimit"
+    ) as HTMLSelectElement;
+    let rate_second = rate_seconds.value;
+
+    console.log("chatbot_idFFFFFFFFF");
+
+    let sendData: SendData = {
+      chatbot_id: chatbot_id,
+      chatbot_name: chatbot_name,
+      base_prompt: base_prompt,
       model: model,
       visibility: visible,
-      domain: document.getElementById("domains").value,
-      rate_msg: document.getElementById("msgLimit").value,
-      rate_second: document.getElementById("timeLimit").value,
+      domain: domain,
+      rate_msg: rate_msg,
+      rate_second: rate_second,
       limit_msg: limitHint,
       interface_init_msg: initMsg,
       interface_suggest_msg: sugMsg,
@@ -157,19 +211,20 @@ const ChatbotSetting = () => {
     //     .catch((err) => {
     //       console.log(err);
     //     });
-    // } else
+    // } else {
+    //   updateSetting(sendData)
+    //     .then((result) => {
+    //       if (result.status == 200) {
+    //         notification.success({
+    //           message: `successfully saved`,
+    //         });
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // }
 
-    // updateSetting(sendData)
-    //   .then((result) => {
-    //     if (result.status == 200) {
-    //       notification.success({
-    //         message: `successfully saved`,
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
     if (!selectedChatIcon && !selectedProfileIcon) {
       sendData.chatbot_id = chatbot_id;
       updateSetting(sendData)
@@ -239,13 +294,30 @@ const ChatbotSetting = () => {
     }
   };
 
-  const reset = (type: any) => {
-    if (type == 0) {
-      document.getElementById("base_prompt").value = basePrompt;
-    } else if (type == 1) {
-      document.getElementById("msgLimit").value = msgLimit;
-      document.getElementById("timeLimit").value = timeLimit;
-      document.getElementById("limithint-input").value = limitHint;
+  const reset = (type: number) => {
+    if (type === 0) {
+      const basePrompt = document.getElementById(
+        "base_prompt"
+      ) as HTMLSelectElement;
+      basePrompt.value = ""; // Reset the value to an empty string or whatever default value you want
+    } else if (type === 1) {
+      const msgLimitInput = document.getElementById(
+        "msgLimit"
+      ) as HTMLInputElement;
+      const timeLimitInput = document.getElementById(
+        "timeLimit"
+      ) as HTMLInputElement;
+      const limitHintInput = document.getElementById(
+        "limithint-input"
+      ) as HTMLInputElement;
+
+      if (msgLimitInput && timeLimitInput && limitHintInput) {
+        msgLimitInput.value = ""; // Reset the value to an empty string or default value
+        timeLimitInput.value = ""; // Reset the value to an empty string or default value
+        limitHintInput.value = ""; // Reset the value to an empty string or default value
+      } else {
+        console.error("One or more elements not found.");
+      }
     }
   };
 
@@ -307,7 +379,9 @@ const ChatbotSetting = () => {
                 id="model_select"
               >
                 {modelList.map((item, index) => (
-                  <option value={item["_id"]}>{item["model_name"]}</option>
+                  <option value={item["_id"]} key={index}>
+                    {item["model_name"]}
+                  </option>
                 ))}
               </select>
             )}
@@ -332,23 +406,25 @@ const ChatbotSetting = () => {
                 id="visibility_select"
               >
                 {visibleList.map((item, index) => (
-                  <option value={item["_id"]}>{item["visible_name"]}</option>
+                  <option value={item["_id"]} key={index}>
+                    {item["visible_name"]}
+                  </option>
                 ))}
               </select>
             )}
             <span className="description">
-              'Private': No one can access your chatbot except you (your
-              account)
+              {`Private: No one can access your chatbot except you (your
+              account)`}
             </span>
             <span className="description">
-              'Private but can be embedded on website': Other people can't
+              {`Private but can be embedded on website : Other people can't
               access your chatbot if you send them the link, but you can still
               embed it on your website and your website visitors will be able to
-              use it. (make sure to set your domains)
+              use it. (make sure to set your domains)`}
             </span>
             <span className="description">
-              ''Public': Anyone with the link can access it on chatbase.co and
-              can be embedded on your website.
+              {`Public : Anyone with the link can access it on chatbase.co and
+              can be embedded on your website.`}
             </span>
             <span className="description">
               Set to public if you want to be able to send a link of your
@@ -364,9 +440,9 @@ const ChatbotSetting = () => {
             />
             <span className="description">Enter each domain in a new line</span>
             <span className="description">
-              Domains you want to embed your chatbot on. Your chatbot visibility
+              {` Domains you want to embed your chatbot on. Your chatbot visibility
               has to be 'Public' or 'Private but can be embedded on website' for
-              this to work.
+              this to work.`}
             </span>
           </div>
           <div className="element">

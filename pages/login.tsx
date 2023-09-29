@@ -72,12 +72,10 @@ const Login = () => {
       .then((result: any) => {
         const token = result.data.token;
         localStorage.setItem("jwtToken", token);
-        notification.success({ message: ` Successfully Login` });
+        notification.success({ message: `Successfully Login` });
         router.push("/chatbot");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log("eeeeeeeeeee", err));
   };
 
   return (

@@ -1,9 +1,6 @@
 import { AnyAction, createSlice } from "@reduxjs/toolkit";
 import { getSetting, require_login } from "../actions/settingActions";
-import { Dispatch } from "redux";
-import { create } from "lodash";
 import { createSetting, retrain } from "../actions/settingActions";
-import { error } from "console";
 
 export const botSetting = createSlice({
   name: "botSetting",
@@ -82,7 +79,7 @@ export const create_botSetting = (data: any) => (dispatch: any) => {
     });
 };
 
-export const retrain_bot = (data: any) => {
+export const retrain_bot = (data: any) => (dispatch: any) => {
   retrain(data)
     .then((res: any) => {
       console.log("LOG");

@@ -1,14 +1,17 @@
 import Head from "next/head";
 import React, { Fragment, useState, useEffect } from "react";
-import Main from "@/components/layout/Main";
+// import Main from "@/components/layout/Main";
 import Image from "next/image";
 import BackIcon from "@/assets/imges/back.png";
+//  @ts-ignore
 import { Document, Page, pdfjs } from "react-pdf";
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Upload, notification, Button } from "antd";
-import { create_botSetting } from "@/redux/reducer/settingReducer";
+// import { create_botSetting } from "@/redux/reducer/settingReducer";
+
 import {
   scraping_url,
   createSetting,
@@ -18,29 +21,43 @@ import {
 import Title from "./Title";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
-import { forEach } from "lodash";
+// import { forEach } from "lodash";
 
 import { UploadOutlined } from "@ant-design/icons";
+import { UploadFile } from "antd/lib/upload/interface"; // Import the correct type
 
 const ReChatbot = () => {
-  const [url, setUrl] = React.useState("");
-  const [file, setFile] = useState();
-  const [linkList, setLinkList] = React.useState([]);
+  const [url, setUrl] = useState("");
+  // const [file, setFile] = useState();
+  // const [file, setFile] = React.useState<File | undefined>(undefined);
+
+  const [file, setFile] = React.useState<UploadFile | undefined>(undefined);
+  const [linkList, setLinkList] = useState([{ link: "" }]);
 
   const deleteAll = () => {
     setLinkList([]);
   };
 
   const fetch_links = async () => {
+    // const sendData = {
+    //   URL: document.getElementById("crawl_url").value + "/",
+    //   limit_count: 20,
+    // };
+
+    const crawlUrlElement = document.getElementById(
+      "crawl_url"
+    ) as HTMLInputElement | null;
+
+    const URL = crawlUrlElement?.value ?? "";
     const sendData = {
-      URL: document.getElementById("crawl_url").value + "/",
+      URL: URL,
       limit_count: 20,
     };
 
     await scraping_url(sendData)
       .then((result) => {
         const urlList = result.data.data;
-        let temp = [];
+        let temp: any = [];
         for (let index = 0; index < urlList.length; index++) {
           const element = urlList[index];
           temp.push({ link: element });
@@ -59,7 +76,7 @@ const ReChatbot = () => {
     });
   };
 
-  console.log(linkList);
+  // console.log(linkList);
 
   const add = () => {
     setLinkList(linkList.concat({ link: "" }));
@@ -90,38 +107,57 @@ const ReChatbot = () => {
   // };
 
   const onFiles = () => {
-    let state = document.getElementById("files").style.display;
+    const states = document.getElementById("files");
+    let state;
+
+    if (states !== null) {
+      state = states.style.display;
+    }
 
     if (state === "none") {
-      document.getElementById("list").style.display = "none";
-      document.getElementById("files").style.display = "flex";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "none";
+      (document.getElementById("files") as HTMLInputElement).style.display =
+        "flex";
     } else {
-      document.getElementById("list").style.display = "flex";
-      document.getElementById("files").style.display = "none";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "flex";
+      (document.getElementById("files") as HTMLInputElement).style.display =
+        "none";
     }
   };
 
   const onWebsite = () => {
-    let state = document.getElementById("website").style.display;
+    let state = (document.getElementById("website") as HTMLInputElement).style
+      .display;
 
     if (state === "none") {
-      document.getElementById("list").style.display = "none";
-      document.getElementById("website").style.display = "flex";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "none";
+      (document.getElementById("website") as HTMLInputElement).style.display =
+        "flex";
     } else {
-      document.getElementById("list").style.display = "flex";
-      document.getElementById("website").style.display = "none";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "flex";
+      (document.getElementById("website") as HTMLInputElement).style.display =
+        "none";
     }
   };
 
   const onText = () => {
-    let state = document.getElementById("text").style.display;
+    let state = (document.getElementById("text") as HTMLInputElement).style
+      .display;
 
     if (state === "none") {
-      document.getElementById("list").style.display = "none";
-      document.getElementById("text").style.display = "flex";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "none";
+      (document.getElementById("text") as HTMLInputElement).style.display =
+        "flex";
     } else {
-      document.getElementById("list").style.display = "flex";
-      document.getElementById("text").style.display = "none";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "flex";
+      (document.getElementById("text") as HTMLInputElement).style.display =
+        "none";
     }
   };
 
@@ -134,9 +170,17 @@ const ReChatbot = () => {
     var formData = new FormData();
     formData.append("embedding_type", emebedding_type);
     formData.append("chatbot_id", chatbot_id);
-    formData.append("is_create", false);
+    formData.append("is_create", false.toString());
+
     if (emebedding_type == 0) {
-      formData.append("file", file.originFileObj);
+      // formData.append("file", file.originFileObj);
+      if (file !== undefined && file.originFileObj !== undefined) {
+        formData.append("file", file.originFileObj);
+      }
+
+      if (file && file.originFileObj) {
+        formData.append("file", file.originFileObj);
+      }
 
       createSetting(formData)
         .then((res) => {
@@ -148,8 +192,12 @@ const ReChatbot = () => {
           console.log(err);
         });
     } else if (emebedding_type == 1) {
-      let chatbot_name = document.getElementById("chatbot_name").value;
-      let content = document.getElementById("chatbot_data").value;
+      let chatbot_name = (
+        document.getElementById("chatbot_name") as HTMLInputElement
+      ).value;
+      let content = (
+        document.getElementById("chatbot_data") as HTMLInputElement
+      ).value;
       formData.append("content", content);
       formData.append("chatbot_name", chatbot_name);
 
@@ -163,7 +211,9 @@ const ReChatbot = () => {
           console.log(err);
         });
     } else if (emebedding_type == 2) {
-      const chatbot_name = document.getElementById("crawl_url").value;
+      const chatbot_name = (
+        document.getElementById("crawl_url") as HTMLInputElement
+      ).value;
       console.log("linkList", linkList);
       web_scraping_chatbot({
         linkList: linkList,
@@ -255,7 +305,9 @@ const ReChatbot = () => {
                 </span>
                 <br />
                 <Upload {...props}>
-                  <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                  <Button icon={<UploadOutlined rev={undefined} />}>
+                    Click to Upload
+                  </Button>
                 </Upload>
 
                 <button className="btn" onClick={() => retrainbot(0)}>

@@ -11,6 +11,7 @@ import { set_chatbotId } from "../../redux/reducer/settingReducer";
 const Settings = () => {
   const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<number>(0);
+
   const router = useRouter();
   const { chatbotId } = router.query;
 

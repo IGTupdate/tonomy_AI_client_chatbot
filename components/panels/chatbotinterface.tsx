@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import Image from 'next/image'
+import Image from "next/image";
 
 const ChatInterface = (props: any) => {
   const initMesssag = "Hi! What can I help you with?";
@@ -26,59 +26,110 @@ const ChatInterface = (props: any) => {
 
   const setInitMsg = () => {
     props.setInitMsg(initMesssag);
-    document.getElementById("initMsg").value = initMesssag;
+    // document.getElementById("initMsg").value = initMesssag;
+    const initMsgElement = document.getElementById(
+      "initMsg"
+    ) as HTMLInputElement;
+    if (initMsgElement) {
+      initMsgElement.value = initMesssag;
+    }
   };
 
   const setUserMsgColor = () => {
     props.setUserMsgColor(userMsgColor);
-    document.getElementById("userMsgColor").value = userMsgColor;
+    // document.getElementById("userMsgColor").value = userMsgColor;
+    const initMsgElement = document.getElementById(
+      "initMsg"
+    ) as HTMLInputElement;
+    if (initMsgElement) {
+      initMsgElement.value = userMsgColor;
+    }
   };
 
   const setIconColor = () => {
     props.setIconColor(iconColor);
-    document.getElementById("iconColor").value = iconColor;
+    // document.getElementById("iconColor").value = iconColor;
+    const initMsgElement = document.getElementById(
+      "initMsg"
+    ) as HTMLInputElement;
+    if (initMsgElement) {
+      initMsgElement.value = iconColor;
+    }
   };
 
-  const onChangeInitMsg = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeInitMsg = (e: any) => {
     props.setInitMsg(e.target.value);
   };
 
-  const onChangeSugMsg = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeSugMsg = (e: any) => {
     props.setSugMsg(e.target.value);
   };
 
-  const onChangeBackColor = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeBackColor = (e: any) => {
     props.setBackColor(e.target.value);
-    if (e.target.value == "dark") {
+    // if (e.target.value == "dark") {
+    //   props.setBackColor("#000000");
+    //   document.getElementById("myBtn").style.filter = "invert(1)";
+    //   document.getElementById("reload").style.filter =
+    //     "brightness(0) invert(1)";
+
+    //   setMsgBackColor("#3F3F45");
+    //   setMsgColor("#FFFFFF");
+    // }
+    if (e.target.value === "dark") {
       props.setBackColor("#000000");
-      document.getElementById("myBtn").style.filter = "invert(1)";
-      document.getElementById("reload").style.filter =
-        "brightness(0) invert(1)";
+
+      const myBtnElement = document.getElementById("myBtn");
+      if (myBtnElement) {
+        myBtnElement.style.filter = "invert(1)";
+      }
+
+      const reloadElement = document.getElementById("reload");
+      if (reloadElement) {
+        reloadElement.style.filter = "brightness(0) invert(1)";
+      }
 
       setMsgBackColor("#3F3F45");
       setMsgColor("#FFFFFF");
     }
 
-    if (e.target.value == "light") {
+    // if (e.target.value == "light") {
+    //   props.setBackColor("#FFFFFF");
+    //   document.getElementById("myBtn").style.filter = "brightness(1) invert(0)";
+    //   document.getElementById("reload").style.filter =
+    //     "brightness(1) invert(0)";
+
+    //   setMsgBackColor("#F4F4F5");
+    //   setMsgColor("#000000");
+    // }
+
+    if (e.target.value === "light") {
       props.setBackColor("#FFFFFF");
-      document.getElementById("myBtn").style.filter = "brightness(1) invert(0)";
-      document.getElementById("reload").style.filter =
-        "brightness(1) invert(0)";
+
+      const myBtnElement = document.getElementById("myBtn");
+      if (myBtnElement) {
+        myBtnElement.style.filter = "brightness(1) invert(0)";
+      }
+
+      const reloadElement = document.getElementById("reload");
+      if (reloadElement) {
+        reloadElement.style.filter = "brightness(1) invert(0)";
+      }
 
       setMsgBackColor("#F4F4F5");
       setMsgColor("#000000");
     }
   };
 
-  const onChangeUserMsgColor = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeUserMsgColor = (e: any) => {
     props.setUserMsgColor(e.target.value);
   };
 
-  const onChangeIconColor = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeIconColor = (e: any) => {
     props.setIconColor(e.target.value);
   };
 
-  const onChangeIcon = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeIcon = (e: any) => {
     if (e.target.value == "right") {
       props.setIconPos("flex-end");
     }
@@ -88,27 +139,53 @@ const ChatInterface = (props: any) => {
     }
   };
 
-  const onChangeInitMsgShowtime = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeInitMsgShowtime = (e: any) => {
     props.setInitMsgShowtime(e.target.value);
   };
 
-  const onChangeProfileIcon = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeProfileIcon = (e: any) => {
     props.setCheckProfileIcon(e.target.checked);
+    // if (props.checkProfileIcon) {
+    //   document.getElementById("profileicon").style.display = "flex";
+    //   document.getElementById("profileimg").style.display = "flex";
+    // } else {
+    //   document.getElementById("profileicon").style.display = "none";
+    //   document.getElementById("profileimg").style.display = "none";
+    // }
     if (props.checkProfileIcon) {
-      document.getElementById("profileicon").style.display = "flex";
-      document.getElementById("profileimg").style.display = "flex";
+      const profileIconElement = document.getElementById("profileicon");
+      const profileImgElement = document.getElementById("profileimg");
+
+      if (profileIconElement && profileImgElement) {
+        profileIconElement.style.display = "flex";
+        profileImgElement.style.display = "flex";
+      }
     } else {
-      document.getElementById("profileicon").style.display = "none";
-      document.getElementById("profileimg").style.display = "none";
+      const profileIconElement = document.getElementById("profileicon");
+      const profileImgElement = document.getElementById("profileimg");
+
+      if (profileIconElement && profileImgElement) {
+        profileIconElement.style.display = "none";
+        profileImgElement.style.display = "none";
+      }
     }
   };
 
   const onChangeChatIcon = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.setCheckChatIcon(e.target.checked);
-    if (props.checkChatIcon) {
-      document.getElementById("chaticon").style.display = "flex";
+    // if (props.checkChatIcon) {
+    //   document.getElementById("chaticon").style.display = "flex";
+    // } else {
+    //   document.getElementById("chaticon").style.display = "none";
+    // }
+
+    const chatIconElement = document.getElementById("chaticon");
+    if (props.checkChatIcon && chatIconElement) {
+      chatIconElement.style.display = "flex";
     } else {
-      document.getElementById("chaticon").style.display = "none";
+      if (chatIconElement) {
+        chatIconElement.style.display = "none";
+      }
     }
   };
 
@@ -214,9 +291,10 @@ const ChatInterface = (props: any) => {
           </div>
           <div className="element">
             <span className="reference">
+              {`
               **If the changes here don't show up immediately on your website
               try clearing your browser cache or use incognito. (New users will
-              see the changes immediately)**
+              see the changes immediately)**`}
             </span>
           </div>
           <div className="element" id="chaticon">
@@ -305,9 +383,9 @@ const ChatInterface = (props: any) => {
                   }}
                 >
                   {props.profileIconUrl ? (
-                   <Image
-                    width={500}
-                    height={500}
+                    <Image
+                      width={500}
+                      height={500}
                       id="profileimg"
                       className="profileicon"
                       src={props.profileIconUrl}
@@ -375,7 +453,7 @@ const ChatInterface = (props: any) => {
                   className="input-container"
                   style={{ backgroundColor: "transparent" }}
                 >
-                  <input  
+                  <input
                     id="input1"
                     type="text"
                     className="input-text"
@@ -405,10 +483,10 @@ const ChatInterface = (props: any) => {
               style={{ justifyContent: `${props.iconPos}` }}
             >
               {props.chatIconUrl && !props.checkChatIcon ? (
-                  <Image
-                    width={500}
-                    height={500}
-                    alt="chatimg"
+                <Image
+                  width={500}
+                  height={500}
+                  alt="chatimg"
                   id="chatimg"
                   className="chaticon"
                   src={props.chatIconUrl}

@@ -12,7 +12,12 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { share_chatbot } from "../../redux/actions/settingActions";
 import { useAppSelector } from "@/redux/hooks";
+import { TbClipboardCopy } from "react-icons/tb";
+import { CiShare1 } from "react-icons/ci";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
+TbClipboardCopy;
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
@@ -69,6 +74,7 @@ const Share = () => {
   const [link, setLink] = React.useState("");
   const [check, setCheck] = React.useState(false);
   const chatbot_id = useAppSelector((state) => state.getSetting.chatbot_id);
+  const router = useRouter();
 
   const handleClick = () => {
     setOpen(true);
@@ -79,11 +85,11 @@ const Share = () => {
     };
     share_chatbot(sendData)
       .then((result) => {
-        console.log(result);
+        console.log("THis is result>>>>", result);
         if (check) {
-          setLink("https://127.0.0.1/settings");
+          setLink("http://localhost:3000/settings");
         } else {
-          setLink("https://127.0.0.1/chatbot-iframe/" + chatbot_id);
+          setLink("http://localhost:3000/chatbot-iframe/" + chatbot_id);
         }
       })
       .catch((err) => {
@@ -104,6 +110,12 @@ const Share = () => {
     }
 
     setOpen(false);
+  };
+
+  const copyText = (entryText: any) => {
+    console.log("entryText>>>>>>>", entryText);
+
+    navigator.clipboard.writeText(entryText);
   };
 
   return (
@@ -137,9 +149,10 @@ const Share = () => {
                   onChange={handleChange}
                 />
                 <span className="description">
-                  <b>Require login for someone to use your chatbot</b> (If you
+                  <b />
+                  {`Require login for someone to use your chatbot</b> (If you
                   don't require login, the messages they send will count for
-                  your account)
+                  your account)`}
                 </span>
               </div>
               <div className="btn-form">
@@ -152,6 +165,22 @@ const Share = () => {
             <div className="element">
               <span className="topic">Use this link to access the chatbot</span>
               <span className="link">{link}</span>
+              <div className="copy-clipboard d-flex justify-content-center m-4">
+                <button
+                  onClick={() => copyText(`${link}`)}
+                  type="button"
+                  className="btn btn-sm border mr-2 rounded-25"
+                >
+                  Copy <TbClipboardCopy />
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-sm border ml-2 rounded-25"
+                  onClick={() => window.open(`${link}`, "_blank")}
+                >
+                  Visit <CiShare1 />
+                </button>
+              </div>
             </div>
           )}
         </div>

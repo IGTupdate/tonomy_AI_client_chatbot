@@ -3,7 +3,7 @@ import axios from "axios";
 export const getSetting = (chatbot_id: string) => {
   const token = localStorage.getItem("jwtToken");
   if (token) {
-    console.log("token: ", token);
+    // console.log("token: ", token);
     axios.defaults.headers.common["x-auth-token"] = token;
   }
   return axios.get(`http://localhost:8080/api/setting/get/${chatbot_id}`);
@@ -26,7 +26,11 @@ export const getDashboardInfo = (settingData: any) => {
 };
 
 export const get_conversation = (settingData: any) => {
-  return axios.post("http://localhost:8080/api/chat/getChatHistory", settingData, { headers: { "Content-Type": "multipart/form-data" },});
+  return axios.post(
+    "http://localhost:8080/api/chat/getChatHistory",
+    settingData,
+    { headers: { "Content-Type": "multipart/form-data" } }
+  );
 };
 
 export const iconUpload = (settingData: any) => {
@@ -42,7 +46,6 @@ export const iconUpload = (settingData: any) => {
 export const createSetting = (settingData: any) => {
   const token = localStorage.getItem("jwtToken");
   if (token) {
-    console.log("token: ", token);
     axios.defaults.headers.common["x-auth-token"] = token;
   }
   return axios.post("http://localhost:8080/api/setting/create", settingData, {

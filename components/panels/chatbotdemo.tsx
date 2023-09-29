@@ -1,38 +1,34 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { useAppSelector } from "@/redux/hooks";
-import Typewriter from "typewriter-effect";
-
+import loader from "../../assets/imges/typing.gif";
 import {
   getDashboardInfo,
   get_conversation,
 } from "../../redux/actions/settingActions";
+import Image from "next/image";
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL;
 
 const Chatbot = () => {
-  const [chat_id, setChatId] = useState<string>(""); // Set the type to string
+  const [chat_id, setChatId] = useState("");
   const chatbot_id = useAppSelector((state) => state.getSetting.chatbot_id);
 
-  const [id, setId] = useState<string>(""); // Set the type to string
-  const [inputMessage, setInputMessage] = useState<string>(""); // Set the type to string
-  const [isFetching, setIsFetching] = useState<boolean>(false); // Set the type to boolean
+  const [inputMessage, setInputMessage] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
-  const [loading, setLoading] = useState<boolean>(false); // Set the type to boolean
-  const [resp, setResp] = useState<string>(""); // Set the type to string
-  const req_qa_box = useRef<HTMLDivElement | null>(null); // Define the correct type for the ref
+  const [loading, setLoading] = useState(false);
+  const req_qa_box = useRef<HTMLDivElement | null>(null);
 
-  const [messages, setMessages] = useState<
-    { content: string; role: "assistant" | "user" }[]
-  >([{ content: "Hi! What can I answer for you today?", role: "assistant" }]);
+  const [messages, setMessages] = useState([
+    { content: "Hi! What can I answer for you today?", role: "assistant" },
+  ]);
 
-  const [logList, setLogList] = useState<any[]>([]); // Use the correct type for logList
+  const [logList, setLogList] = useState<any[]>([]);
 
   useEffect(() => {
     const params = new URLSearchParams(window?.location?.search);
     const id: any = params.get("id");
-
-    setId(id);
 
     fetch(`${base_url}/api/chats?id=${id}&chat_id=${chat_id}`)
       .then(async (response) => await response.json())
@@ -62,6 +58,7 @@ const Chatbot = () => {
     chat_id: string
   ) => {
     setLoading(false);
+
     setMessages((prevMessages) => [
       ...prevMessages,
       { content: answer, role: "assistant" },
@@ -79,8 +76,6 @@ const Chatbot = () => {
     if (isFetching) {
       setLoading(true);
 
-      // let data = { answer: "Here is response #" + Math.random(), chat_id: 100 };
-
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -95,11 +90,8 @@ const Chatbot = () => {
           await fetch(`http://localhost:8080/api/chat/create`, requestOptions)
         ).json();
 
-        setResp(data && data?.text);
-
-        handleChatResponse(inputMessage, data.text, data.chat_id);
-
         setLoading(false);
+        handleChatResponse(inputMessage, data.text, data.chat_id);
       };
 
       dataFetch();
@@ -123,14 +115,13 @@ const Chatbot = () => {
         ...prevMessages,
         { content: inputMessage, role: "user" },
       ]);
+
       setIsFetching(true);
     }
   }, [inputMessage]);
 
   const handleSendMessageMock = (message: string) => {
-    if (!inputMessage) {
-      setInputMessage(message);
-    }
+    if (!inputMessage) setInputMessage(message);
   };
 
   const PageReload = () => {
@@ -155,12 +146,8 @@ const Chatbot = () => {
   useEffect(() => {
     logList.map((item) => {
       get_conversation({ id: item?.Id })
-        .then((res) => {
-          setMessages((prevMessages) => [...res.data.data]);
-        })
-        .catch((err) => {
-          console.error("error", err);
-        });
+        .then((res) => setMessages((prevMessages) => [...res.data.data]))
+        .catch((err) => console.error("error", err));
     });
   }, [logList]);
 
@@ -170,30 +157,29 @@ const Chatbot = () => {
         <ArrowPathIcon className="reload" onClick={PageReload} />
       </div>
       <hr />
+
       <div className="widget">
         <div className="chat-widget" ref={req_qa_box}>
           <div className="chat-content">
             {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`message ${
-                  message.role === "user" ? "user" : "bot"
-                }`}
-              >
-                {message.content}
-              </div>
+              <>
+                {console.log("message.role >>>", message.role)}
+                <div
+                  key={index}
+                  className={`message ${
+                    message.role === "user" ? "user" : "assistant"
+                  }`}
+                >
+                  {message.content}
+                </div>
+              </>
             ))}
           </div>
-          {loading ? (
-            <Typewriter
-              options={{
-                strings: [`${resp}`],
-                autoStart: true,
-                loop: true,
-              }}
-            />
-          ) : null}
+          {loading && (
+            <Image src={loader} width={100} height={100} alt="loading" />
+          )}
         </div>
+
         <div className="input-container">
           <input
             id="input1"
@@ -201,6 +187,7 @@ const Chatbot = () => {
             className="input-text"
             placeholder="Type your message here..."
           />
+
           <button
             id="myBtn"
             className="send-button"

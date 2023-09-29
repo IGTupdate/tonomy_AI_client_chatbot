@@ -23,7 +23,6 @@ const Dashboard = () => {
   useEffect(() => {
     getDashboardInfo({ chatbot_id: chatbotId })
       .then((res) => {
-        console.log("getDashboardInfo<<<<<<<<<<<>>>>>>>", res?.data);
         const data = res?.data?.data;
         setAvgNumber(data && data?.avg);
         setTotalNumber(data && data?.total_conversation);
@@ -40,19 +39,11 @@ const Dashboard = () => {
 
   const log_select = async (conversation_id: any) => {
     localStorage.setItem("conversation_id", conversation_id);
-    console.log(conversation_id);
 
     get_conversation({ id: conversation_id })
       .then((res) => {
         setMessages(res.data.data);
-        console.log(
-          "vresresresresresresresresresv?????????????????????????????????",
-          res
-        );
-
-        console.log("conversation_id>>>>>", conversation_id);
         setModalState(true);
-        console.log(modalState);
       })
       .catch((err) => {
         console.log(err);
@@ -75,7 +66,7 @@ const Dashboard = () => {
               {/* Render the messages */}
               <div className="chat-widget">
                 <div className="chat-content">
-                  {messages.map((message, index) => (
+                  {messages.map((message: any, index) => (
                     <div
                       key={index}
                       className={`message ${
@@ -116,11 +107,10 @@ const Dashboard = () => {
           <div className="form">
             <span className="title">Conversations</span>
             <ul className="msglog-list">
-              {logList?.map((log, index) => (
+              {logList?.map((log: any, index) => (
                 <>
-                  {console.log("log>>>>>>>", log)}
                   <li
-                    key={index}
+                    key={log.Id}
                     className="msglog-form"
                     onClick={() => log_select(log["Id"])}
                   >

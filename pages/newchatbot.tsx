@@ -28,11 +28,9 @@ const NewChatbot = () => {
   const [url, setUrl] = React.useState("");
 
   const [file, setFile] = useState();
-  const create_bot_flag = useAppSelector(
-    (state) => state.getSetting.create_bot
-  );
+  const create_bot_flag = useAppSelector(    (state) => state.getSetting.create_bot  );
 
-  const [linkList, setLinkList] = React.useState([]);
+  const [linkList, setLinkList] = useState<{ link: any }[]>([]);
 
   const router = useRouter(); // Initialize the router
 
@@ -42,7 +40,8 @@ const NewChatbot = () => {
 
   const fetch_links = async () => {
     const sendData = {
-      URL: document.getElementById("crawl_url").value + "/",
+      URL:
+        (document.getElementById("crawl_url") as HTMLInputElement).value + "/",
       limit_count: 20,
     };
 
@@ -50,6 +49,7 @@ const NewChatbot = () => {
       .then((result) => {
         const urlList = result.data.data;
         let temp = [];
+
         for (let index = 0; index < urlList.length; index++) {
           const element = urlList[index];
           temp.push({ link: element });
@@ -60,6 +60,22 @@ const NewChatbot = () => {
       .catch((err) => {
         console.log(err);
       });
+
+    // await scraping_url(sendData)
+    //   .then((result) => {
+    //     const urlList = result.data.data;
+    //     let temp: { link: any }[] = [];
+
+    //     for (let index = 0; index < urlList.length; index++) {
+    //       const element = urlList[index];
+    //       temp.push({ link: element });
+    //     }
+
+    //     setLinkList(temp);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   const deleteOne = async (index: any) => {
@@ -90,38 +106,53 @@ const NewChatbot = () => {
   };
 
   const onFiles = () => {
-    let state = document.getElementById("files").style.display;
+    let state = (document.getElementById("files") as HTMLInputElement).style
+      .display;
 
     if (state === "none") {
-      document.getElementById("list").style.display = "none";
-      document.getElementById("files").style.display = "flex";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "none";
+      (document.getElementById("files") as HTMLInputElement).style.display =
+        "flex";
     } else {
-      document.getElementById("list").style.display = "flex";
-      document.getElementById("files").style.display = "none";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "flex";
+      (document.getElementById("files") as HTMLInputElement).style.display =
+        "none";
     }
   };
 
   const onWebsite = () => {
-    let state = document.getElementById("website").style.display;
+    let state = (document.getElementById("website") as HTMLInputElement).style
+      .display;
 
     if (state === "none") {
-      document.getElementById("list").style.display = "none";
-      document.getElementById("website").style.display = "flex";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "none";
+      (document.getElementById("website") as HTMLInputElement).style.display =
+        "flex";
     } else {
-      document.getElementById("list").style.display = "flex";
-      document.getElementById("website").style.display = "none";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "flex";
+      (document.getElementById("website") as HTMLInputElement).style.display =
+        "none";
     }
   };
 
   const onText = () => {
-    let state = document.getElementById("text").style.display;
+    let state = (document.getElementById("text") as HTMLInputElement).style
+      .display;
 
     if (state === "none") {
-      document.getElementById("list").style.display = "none";
-      document.getElementById("text").style.display = "flex";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "none";
+      (document.getElementById("text") as HTMLInputElement).style.display =
+        "flex";
     } else {
-      document.getElementById("list").style.display = "flex";
-      document.getElementById("text").style.display = "none";
+      (document.getElementById("list") as HTMLInputElement).style.display =
+        "flex";
+      (document.getElementById("text") as HTMLInputElement).style.display =
+        "none";
     }
   };
   const create_bot = (emebedding_type: any) => {
@@ -139,11 +170,15 @@ const NewChatbot = () => {
           router.push("/chatbot");
         })
         .catch((err) => {
-          console.log(err);
+          console.log("errerrerrerrerrerr>>>>>>>", err);
         });
     } else if (emebedding_type == 1) {
-      let chatbot_name = document.getElementById("chatbot_name").value;
-      let content = document.getElementById("chatbot_data").value;
+      let chatbot_name = (
+        document.getElementById("chatbot_name") as HTMLInputElement
+      ).value;
+      let content = (
+        document.getElementById("chatbot_data") as HTMLInputElement
+      ).value;
       formData.append("content", content);
       formData.append("chatbot_name", chatbot_name);
 
@@ -158,7 +193,9 @@ const NewChatbot = () => {
           console.log(err);
         });
     } else if (emebedding_type == 2) {
-      const chatbot_name = document.getElementById("crawl_url").value;
+      const chatbot_name = (
+        document.getElementById("crawl_url") as HTMLInputElement
+      ).value;
       if (chatbot_name == "") {
         notification.error({
           message: ` Enter url to scrape `,
@@ -258,7 +295,9 @@ const NewChatbot = () => {
                   </span>
                   <br />
                   <Upload {...props}>
-                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                    <Button icon={<UploadOutlined rev={undefined} />}>
+                      Click to Upload
+                    </Button>
                   </Upload>
 
                   <button className="btn" onClick={() => create_bot(0)}>
@@ -351,7 +390,7 @@ const NewChatbot = () => {
                       <div />
                     )}
                   </div>
-                  {linkList.map((link, index) => (
+                  {linkList.map((link: any, index: any) => (
                     <div key={index} className="link-form">
                       <input
                         className="link-input"

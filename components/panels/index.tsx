@@ -6,9 +6,7 @@ import Embed from "./embed";
 import Share from "./share";
 import Delete from "./delete";
 
-type PanelsProps = {
-  activeTab: number;
-};
+type PanelsProps = { activeTab: number };
 
 const Panels = ({ activeTab }: PanelsProps) => {
   return (

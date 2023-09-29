@@ -9,7 +9,6 @@ const Settings = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
 
   const handleTabChange = (tabIndex: number) => {
-    console.log("tabIndex :>>>>> ", tabIndex);
     setActiveTab(tabIndex);
   };
 
@@ -19,10 +18,10 @@ const Settings = () => {
     if (!mail) {
       window.location.pathname = "/chatbot";
     } else {
-      const sendData = {
-        mail: mail,
-      };
-      getChatbotList(sendData)
+      const sendData = { mail: mail };
+
+      // getChatbotList(sendData)
+      getChatbotList()
         .then((res) => {
           if (res.data.data.length == 0) {
             window.location.pathname = "/chatbot";

@@ -1,6 +1,6 @@
-import { createStore, AnyAction, Store } from "redux";
-import { applyMiddleware, combineReducers } from "redux";
-import { HYDRATE, createWrapper } from "next-redux-wrapper";
+import { createStore } from "redux";
+import { applyMiddleware } from "redux";
+import { createWrapper } from "next-redux-wrapper";
 import thunkMiddleware from "redux-thunk";
 
 import rootReducer from "./redux/reducer";
