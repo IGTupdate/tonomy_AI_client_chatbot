@@ -133,6 +133,7 @@ const Chatbot = () => {
   };
 
   useEffect(() => {
+
     getDashboardInfo({ chatbot_id: chatbot_id })
       .then((res) => {
         const data = res.data.data;

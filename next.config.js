@@ -3,4 +3,19 @@ const nextConfig = {
   reactStrictMode: true,
 }
 
-module.exports = nextConfig
+// module.exports = nextConfig
+// next.config.js
+module.exports = {
+  future: {
+    webpack5: true,
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/widget/:path*',
+        destination: '/widget',
+      },
+    ];
+  },
+};
+

@@ -23,12 +23,15 @@ import {
 } from "../redux/actions/settingActions";
 
 let sendData = new FormData();
-
+interface CustomFile {
+  originFileObj: Blob;
+  // Define other properties if needed
+}
 const NewChatbot = () => {
   const [url, setUrl] = React.useState("");
 
-  const [file, setFile] = useState();
-  const create_bot_flag = useAppSelector(    (state) => state.getSetting.create_bot  );
+  const [file, setFile] = useState<CustomFile | null>(null);
+  // const create_bot_flag = useAppSelector(    (state) => state.getSetting.create_bot  );
 
   const [linkList, setLinkList] = useState<{ link: any }[]>([]);
 
@@ -160,7 +163,7 @@ const NewChatbot = () => {
     formData.append("embedding_type", emebedding_type);
 
     if (emebedding_type == 0) {
-      formData.append("file", file.originFileObj);
+      if (file) formData.append("file", file.originFileObj);
 
       createSetting(formData)
         .then((res) => {

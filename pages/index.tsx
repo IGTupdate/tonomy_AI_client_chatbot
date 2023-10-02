@@ -11,9 +11,7 @@ const Home = () => {
           <link rel="icon" href="../assets/imges/icon.svg" sizes="any" />
           <title>Home</title>
         </Head>
-        <div>
-          <ChatbotWidget />
-        </div>
+        <div>{/* <ChatbotWidget /> */}</div>
       </Fragment>
     </Main>
   );
