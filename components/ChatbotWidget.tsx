@@ -21,7 +21,7 @@ const ChatbotWidget = (id: any) => {
       <div className="chatbot-widget-container">
         {showSettings && (
           <div className="small-chatbot-container text-right float-right">
-            <Chatbot chatbot_id={id.chatbot_id} />
+            <Chatbot />
           </div>
         )}
         <div className="chatbot ">
