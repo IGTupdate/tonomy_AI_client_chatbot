@@ -27,13 +27,13 @@ import "@/assets/css/delete.css";
 import "@/assets/css/share.css";
 
 // Files
+
 import useToggle from "@/hooks/useToggle";
 import { wrapper } from "@/store";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
 
 const App = ({ Component, pageProps }: AppProps) => {
-  
   const { isOpen, onToggle } = useToggle();
 
   const value = {
@@ -48,4 +48,4 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default wrapper.withRedux(App);
+export default App;

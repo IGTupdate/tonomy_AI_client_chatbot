@@ -14,7 +14,7 @@ const Delete = () => {
       .then((result: any) => {
         if (result.status == 200) {
           notification.success({ message: `successfully saved` });
-          window.location.href = "http://localhost:3000/chatbot";
+          window.location.href = "https://tonomyai.netlify.app/chatbot";
         }
       })
       .catch((err: any) => {

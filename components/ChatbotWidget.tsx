@@ -5,7 +5,9 @@ import Image from "next/image";
 import chatIcon from "../assets/imges/pngegg.png";
 import Chatbot from "../components/panels/chatbotdemo";
 
-const ChatbotWidget = () => {
+const ChatbotWidget = (id: any) => {
+  console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv", id);
+
   const [showSettings, setShowSettings] = useState(false);
   const [selectedElement, setSelectedElement] = useState("");
 
@@ -19,7 +21,7 @@ const ChatbotWidget = () => {
       <div className="chatbot-widget-container">
         {showSettings && (
           <div className="small-chatbot-container text-right float-right">
-            <Chatbot />
+            <Chatbot chatbot_id={id.chatbot_id} />
           </div>
         )}
         <div className="chatbot ">

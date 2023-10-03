@@ -284,26 +284,26 @@ const Embed = () => {
       });
   }, []);
 
-const handleClick = () => {
-  const visiblelist = document.getElementById(
-    "embedded_visible"
-  ) as HTMLSelectElement;
+  const handleClick = () => {
+    const visiblelist = document.getElementById(
+      "embedded_visible"
+    ) as HTMLSelectElement;
 
-  const visible = visiblelist?.options[visiblelist.selectedIndex].value;
+    const visible = visiblelist?.options[visiblelist.selectedIndex].value;
 
-  const sendData = {
-    chatbot_id: chatbot_id,
-    visible: visible,
+    const sendData = {
+      chatbot_id: chatbot_id,
+      visible: visible,
+    };
+
+    update_embedded_visible(sendData)
+      .then(() => {
+        setSuccessOpen(true);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
-
-  update_embedded_visible(sendData)
-    .then(() => {
-      setSuccessOpen(true);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-};
 
   const onClose = () => {
     // setSuccessOpen(false);
@@ -455,8 +455,9 @@ const handleClick = () => {
               </pre> */}
               <pre className="code-form">
                 &lt;iframe src=
-                {`"http://localhost:3000/chatbot-iframe/${chatbot_id}"`}&ensp;
-                width={`"100%"`}&ensp;height={`"700"`}&ensp;frameborder={`"0"`}
+                {`"https://tonomyai.netlify.app/chatbot-iframe/${chatbot_id}"`}
+                &ensp; width={`"100%"`}&ensp;height={`"700"`}&ensp;frameborder=
+                {`"0"`}
                 &gt;&lt;/iframe&gt;
               </pre>
 
@@ -467,7 +468,8 @@ const handleClick = () => {
               <pre className="code-form">
                 &lt;script
                 <br />
-                &ensp;src={`"http://localhost:8080/widget.js"`}
+                &ensp;src=
+                {`"https://tonomyai.netlify.app/widget.js"`}
                 <br />
                 &ensp;data-chat-app-id={`"${chatbot_id}"`}
                 <br />
@@ -484,4 +486,3 @@ const handleClick = () => {
 };
 
 export default Embed;
-

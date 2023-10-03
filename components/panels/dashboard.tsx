@@ -21,6 +21,8 @@ const Dashboard = () => {
   const { chatbotId } = router.query;
 
   useEffect(() => {
+    // console.log("bbbbbbbbbbbbbb", chatbotId);
+
     getDashboardInfo({ chatbot_id: chatbotId })
       .then((res) => {
         const data = res?.data?.data;

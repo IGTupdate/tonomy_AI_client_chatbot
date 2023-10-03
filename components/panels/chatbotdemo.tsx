@@ -7,28 +7,35 @@ import {
   get_conversation,
 } from "../../redux/actions/settingActions";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL;
 
 const Chatbot = () => {
+  const router = useRouter();
+
   const [chat_id, setChatId] = useState("");
-  const chatbot_id = useAppSelector((state) => state.getSetting.chatbot_id);
+
+  const chatbot_id = router.query.chatbotId;
+
+  // const chatbot_id = useAppSelector((state) => state.getSetting.chatbot_id);
+  const [logList, setLogList] = useState<any[]>([]);
 
   const [inputMessage, setInputMessage] = useState("");
   const [isFetching, setIsFetching] = useState(false);
 
   const [loading, setLoading] = useState(false);
+
   const req_qa_box = useRef<HTMLDivElement | null>(null);
 
   const [messages, setMessages] = useState([
     { content: "Hi! What can I answer for you today?", role: "assistant" },
   ]);
 
-  const [logList, setLogList] = useState<any[]>([]);
-
   useEffect(() => {
     const params = new URLSearchParams(window?.location?.search);
     const id: any = params.get("id");
+    // console.log("id>>>", id);
 
     fetch(`${base_url}/api/chats?id=${id}&chat_id=${chat_id}`)
       .then(async (response) => await response.json())
@@ -63,6 +70,7 @@ const Chatbot = () => {
       ...prevMessages,
       { content: answer, role: "assistant" },
     ]);
+
     setChatId(chat_id);
     setInputMessage("");
     setIsFetching(false);
@@ -87,7 +95,10 @@ const Chatbot = () => {
 
       const dataFetch = async () => {
         const data = await (
-          await fetch(`http://localhost:8080/api/chat/create`, requestOptions)
+          await fetch(
+            `https://tonomy-ai-chatbot-api.vercel.app/api/chat/create`,
+            requestOptions
+          )
         ).json();
 
         setLoading(false);
@@ -133,6 +144,7 @@ const Chatbot = () => {
   };
 
   useEffect(() => {
+    // console.log("chatbot_idVVVVVVVVVVVLLLLL", chatbot_id);
 
     getDashboardInfo({ chatbot_id: chatbot_id })
       .then((res) => {
@@ -152,6 +164,8 @@ const Chatbot = () => {
     });
   }, [logList]);
 
+  // console.log("vvvvvvvvvvvvvvvvvvvvvvvvrrrrrrrrRRRv", messages);
+
   return (
     <div id="chatdemo-container">
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -163,17 +177,14 @@ const Chatbot = () => {
         <div className="chat-widget" ref={req_qa_box}>
           <div className="chat-content">
             {messages.map((message, index) => (
-              <>
-                {console.log("message.role >>>", message.role)}
-                <div
-                  key={index}
-                  className={`message ${
-                    message.role === "user" ? "user" : "assistant"
-                  }`}
-                >
-                  {message.content}
-                </div>
-              </>
+              <div
+                key={index}
+                className={`message ${
+                  message.role === "user" ? "user" : "assistant"
+                }`}
+              >
+                {message.content}
+              </div>
             ))}
           </div>
           {loading && (
