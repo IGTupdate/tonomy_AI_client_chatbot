@@ -350,11 +350,8 @@ const Chatbot = () => {
       };
 
       const dataFetch = async () => {
-        const data = await(
-          await fetch(
-            `https://tonomy-ai-chatbot-api.vercel.app/api/chat/create`,
-            requestOptions
-          )
+        const data = await (
+          await fetch(`http://localhost:8080/api/chat/create`, requestOptions)
         ).json();
 
         setLoading(false);

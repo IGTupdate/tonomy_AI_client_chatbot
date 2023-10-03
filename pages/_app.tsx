@@ -32,6 +32,7 @@ import useToggle from "@/hooks/useToggle";
 import { wrapper } from "@/store";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const App = ({ Component, pageProps }: AppProps) => {
   const { isOpen, onToggle } = useToggle();
@@ -43,7 +44,9 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   return (
     <Provider store={store}>
-      <Component {...pageProps} />
+      <GoogleOAuthProvider clientId="56710664081-0isafptr60a06gq3grfn88b8bjoh1os1.apps.googleusercontent.com">
+        <Component {...pageProps} />
+      </GoogleOAuthProvider>
     </Provider>
   );
 };

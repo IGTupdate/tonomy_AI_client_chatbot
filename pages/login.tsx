@@ -1,35 +1,25 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
+import { login } from "../redux/actions/AuthActions";
+
+import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import MicrosoftLogin from "react-microsoft-login";
+
+import axios from "axios";
+
 import { Fragment, useState } from "react";
 import Head from "next/head";
 import Main from "@/components/layout/Main";
-import GoogleLogin from "react-google-login";
-import MicrosoftLogin from "react-microsoft-login";
 import { notification } from "antd";
 
-import { login } from "../redux/actions/AuthActions";
-
-type Inputs = {
-  email: string;
-  password: string;
-};
-
 const Login = () => {
-  const [inputs, setInputs] = useState<Inputs>({
-    email: "",
-    password: "",
-  });
+  const router = useRouter();
+  const [user, setUser] = useState([]);
+
   const [accessToken, setAccessToken] = useState("");
   const [authorized, setAuthorized] = useState(false);
   const [optionsVisibity, setOptionsVisibility] = useState(true);
-  const router = useRouter();
-
-  const handleChange = (e: any) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setInputs((prev) => ({ ...prev, [name]: value }));
-  };
 
   useEffect(() => {
     const start = async () => {
@@ -45,11 +35,6 @@ const Login = () => {
     start();
   }, []);
 
-  const authSuccessful = (response: any) => {
-    setAccessToken(response.accessToken);
-    setOptionsVisibility(false);
-  };
-
   const authHandler = (err: any, data: any) => {
     if (data && data.authResponseWithAccessToken) {
       setAccessToken(data.authResponseWithAccessToken.accessToken);
@@ -58,25 +43,40 @@ const Login = () => {
     setAuthorized(true);
   };
 
-  const onFailure = (error: any) => {
-    console.log(error);
-  };
+  const logins = useGoogleLogin({
+    onSuccess: (codeResponse: any) => setUser(codeResponse),
+    onError: (error) => console.log("Login Failed:", error),
+  });
 
-  const responseGoogle = async (response: any) => {
-    const loginData = {
-      mail: response.profileObj.email,
-      type: 1,
-    };
-
-    await login(loginData)
-      .then((result: any) => {
-        const token = result.data.token;
-        localStorage.setItem("jwtToken", token);
-        notification.success({ message: `Successfully Login` });
-        router.push("/chatbot");
-      })
-      .catch((err) => console.log("eeeeeeeeeee", err));
-  };
+  useEffect(() => {
+    if (user) {
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+              Accept: "application/json",
+            },
+          }
+        )
+        .then(async (res: any) => {
+          const loginData = {
+            mail: res.email,
+            type: 1,
+          };
+          await login(loginData)
+            .then((result: any) => {
+              const token = result.data.token;
+              localStorage.setItem("jwtToken", token);
+              notification.success({ message: `Successfully Login` });
+              router.push("/chatbot");
+            })
+            .catch((err) => console.log("eeeeeeeeeee", err));
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [user]);
 
   return (
     <Main>
@@ -92,16 +92,12 @@ const Login = () => {
                   <div className="login">
                     <div className="oauth-btn">
                       <div className="oauth-element">
-                        <GoogleLogin
-                          clientId="1037111719801-57leuusf3igree0os4oaa7iu2qf8uocs.apps.googleusercontent.com"
-                          buttonText="Sign in with Google"
-                          scope="profile"
-                          onFailure={onFailure}
-                          cookiePolicy={"single_host_origin"}
-                          onSuccess={responseGoogle}
-                          isSignedIn={true}
+                        <button
                           className="oauth-google-element"
-                        />
+                          onClick={() => logins()}
+                        >
+                          Sign in with Google
+                        </button>
                       </div>
 
                       <div className="oauth-element">
