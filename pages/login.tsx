@@ -12,10 +12,14 @@ import { Fragment, useState } from "react";
 import Head from "next/head";
 import Main from "@/components/layout/Main";
 import { notification } from "antd";
+interface User {
+  access_token: string;
+  // Other properties if needed
+}
 
 const Login = () => {
   const router = useRouter();
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState<User>({ access_token: "" });
 
   const [accessToken, setAccessToken] = useState("");
   const [authorized, setAuthorized] = useState(false);
