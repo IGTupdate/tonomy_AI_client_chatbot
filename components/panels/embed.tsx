@@ -456,7 +456,7 @@ const Embed = () => {
               <pre className="code-form">
                 &lt;iframe src=
                 {`"https://tonomyai.netlify.app/chatbot-iframe/${chatbot_id}"`}
-                &ensp; width={`"100%"`}&ensp;height={`"700"`}&ensp;frameborder=
+                &ensp; width={`"100%"`}&ensp;height={`"1000"`}&ensp;frameborder=
                 {`"0"`}
                 &gt;&lt;/iframe&gt;
               </pre>

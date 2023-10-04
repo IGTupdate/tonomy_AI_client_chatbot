@@ -351,7 +351,10 @@ const Chatbot = () => {
 
       const dataFetch = async () => {
         const data = await (
-          await fetch(`http://localhost:8080/api/chat/create`, requestOptions)
+          await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/chat/create`,
+            requestOptions
+          )
         ).json();
 
         setLoading(false);

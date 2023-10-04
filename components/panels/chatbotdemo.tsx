@@ -37,15 +37,17 @@ const Chatbot = () => {
     const id: any = params.get("id");
     // console.log("id>>>", id);
 
-    fetch(`${base_url}/api/chats?id=${id}&chat_id=${chat_id}`)
-      .then(async (response) => await response.json())
-      .then((data) => setMessages((prevMessages) => [...prevMessages, ...data]))
-      .then((data) =>
-        console.log(`%c ${data}`, "background: #222; color: green")
-      )
-      .catch((error) =>
-        console.log(`%c ${error}`, "background: #222; color: red")
-      );
+    // fetch(
+    //   `${process.env.NEXT_PUBLIC_BASE_URL}/chats?id=${id}&chat_id=${chat_id}`
+    // )
+    //   .then(async (response) => await response.json())
+    //   .then((data) => setMessages((prevMessages) => [...prevMessages, ...data]))
+    //   .then((data) =>
+    //     console.log(`%c ${data}`, "background: #222; color: green")
+    //   )
+    //   .catch((error) =>
+    //     console.log(`%c ${error}`, "background: #222; color: red")
+    //   );
 
     document
       .getElementById("input1")
@@ -95,7 +97,10 @@ const Chatbot = () => {
 
       const dataFetch = async () => {
         const data = await (
-          await fetch(`http://localhost:8080/api/chat/create`, requestOptions)
+          await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/chat/create`,
+            requestOptions
+          )
         ).json();
 
         setLoading(false);

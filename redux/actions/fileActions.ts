@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const uploadPdfs = (formData: any) => {
   return axios.post(
-    "http://localhost:8080/api/setting/upload-pdfs",
+  `${process.env.NEXT_PUBLIC_BASE_URL}/setting/upload-pdfs`,
     formData,
     {}
   );
