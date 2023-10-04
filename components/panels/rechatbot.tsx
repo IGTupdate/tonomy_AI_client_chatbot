@@ -89,7 +89,9 @@ const ReChatbot = () => {
     },
     maxCount: 1,
     onChange(e: any) {
+      console.log("e???????>>>>>>>>>>>>>>>>>>>e", e);
       setUrl(URL.createObjectURL(e.file.originFileObj));
+      console.log(URL.createObjectURL(e.file.originFileObj), "url");
       setFile(e.file);
     },
   };
@@ -97,7 +99,7 @@ const ReChatbot = () => {
   const dispatch = useAppDispatch();
   const chatbot_id = useAppSelector((state) => state.getSetting.chatbot_id);
 
-  const [pdfCollection, setPdfCollection] = useState("");
+  // const [pdfCollection, setPdfCollection] = useState("");
 
   // const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   let files = e.target.files;
@@ -242,6 +244,8 @@ const ReChatbot = () => {
 
       createSetting(formData)
         .then((res) => {
+          console.log("Rechatbot Befor res>>", res);
+
           notification.success({
             message: "Successfully created",
           });
@@ -264,6 +268,8 @@ const ReChatbot = () => {
 
       createSetting(formData)
         .then((res) => {
+          console.log("Rechatbot after res>>", res);
+
           notification.success({
             message: "Successfully created",
           });
@@ -292,6 +298,9 @@ const ReChatbot = () => {
         });
     }
   };
+
+  console.log("file>>>>>", file);
+
   return (
     <Fragment>
       <Head>
