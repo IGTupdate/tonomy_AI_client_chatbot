@@ -97,9 +97,13 @@ const Login = () => {
                     <div className="oauth-btn">
                       <div className="oauth-element">
                         <button
-                          className="oauth-google-element"
+                          className="oauth-google-element bg-transparent shadow-none"
                           onClick={() => logins()}
                         >
+                          <img
+                            className="google-icon mr-4"
+                            src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                          />
                           Sign in with Google
                         </button>
                       </div>
