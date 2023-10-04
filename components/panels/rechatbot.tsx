@@ -166,18 +166,76 @@ const ReChatbot = () => {
     setLinkList([...linkList]);
   };
 
+  // const retrainbot = (emebedding_type: any) => {
+  //   var formData = new FormData();
+  //   formData.append("embedding_type", emebedding_type);
+  //   formData.append("chatbot_id", chatbot_id);
+  //   formData.append("is_create", false.toString());
+
+  //   if (emebedding_type == 0) {
+  //     // formData.append("file", file.originFileObj);
+  //     if (file !== undefined && file.originFileObj !== undefined) {
+  //       formData.append("file", file.originFileObj);
+  //     }
+
+  //     if (file && file.originFileObj) {
+  //       formData.append("file", file.originFileObj);
+  //     }
+
+  //     createSetting(formData)
+  //       .then((res) => {
+  //         notification.success({
+  //           message: ` Successfully created `,
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   } else if (emebedding_type == 1) {
+  //     let chatbot_name = (
+  //       document.getElementById("chatbot_name") as HTMLInputElement
+  //     ).value;
+  //     let content = (
+  //       document.getElementById("chatbot_data") as HTMLInputElement
+  //     ).value;
+  //     formData.append("content", content);
+  //     formData.append("chatbot_name", chatbot_name);
+
+  //     createSetting(formData)
+  //       .then((res) => {
+  //         notification.success({
+  //           message: ` Successfully created `,
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   } else if (emebedding_type == 2) {
+  //     const chatbot_name = (
+  //       document.getElementById("crawl_url") as HTMLInputElement
+  //     ).value;
+  //     console.log("linkList", linkList);
+  //     web_scraping_chatbot({
+  //       linkList: linkList,
+  //       chatbot_id: chatbot_id,
+  //       is_create: false,
+  //       chatbot_name: chatbot_name,
+  //     })
+  //       .then((result) => {
+  //         console.log(result);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // };
   const retrainbot = (emebedding_type: any) => {
-    var formData = new FormData();
+    const formData = new FormData();
     formData.append("embedding_type", emebedding_type);
     formData.append("chatbot_id", chatbot_id);
     formData.append("is_create", false.toString());
 
-    if (emebedding_type == 0) {
-      // formData.append("file", file.originFileObj);
-      if (file !== undefined && file.originFileObj !== undefined) {
-        formData.append("file", file.originFileObj);
-      }
-
+    if (emebedding_type === 0) {
       if (file && file.originFileObj) {
         formData.append("file", file.originFileObj);
       }
@@ -185,51 +243,55 @@ const ReChatbot = () => {
       createSetting(formData)
         .then((res) => {
           notification.success({
-            message: ` Successfully created `,
+            message: "Successfully created",
           });
         })
         .catch((err) => {
-          console.log(err);
+          console.log("Rechatbot Befor err>>", err);
+          notification.error({
+            message: "Error creating chatbot",
+          });
         });
-    } else if (emebedding_type == 1) {
-      let chatbot_name = (
-        document.getElementById("chatbot_name") as HTMLInputElement
-      ).value;
-      let content = (
-        document.getElementById("chatbot_data") as HTMLInputElement
-      ).value;
-      formData.append("content", content);
-      formData.append("chatbot_name", chatbot_name);
+    } else if (emebedding_type === 1) {
+      const chatbot_name = document.getElementById(
+        "chatbot_name"
+      ) as HTMLInputElement;
+      const content = document.getElementById(
+        "chatbot_data"
+      ) as HTMLInputElement;
+      formData.append("content", content.value);
+      formData.append("chatbot_name", chatbot_name.value);
 
       createSetting(formData)
         .then((res) => {
           notification.success({
-            message: ` Successfully created `,
+            message: "Successfully created",
           });
         })
         .catch((err) => {
-          console.log(err);
+          console.log('"Rechatbot err111>>"', err);
+          notification.error({
+            message: "Error creating chatbot",
+          });
         });
-    } else if (emebedding_type == 2) {
-      const chatbot_name = (
-        document.getElementById("crawl_url") as HTMLInputElement
-      ).value;
-      console.log("linkList", linkList);
+    } else if (emebedding_type === 2) {
+      const chatbot_name = document.getElementById(
+        "crawl_url"
+      ) as HTMLInputElement;
       web_scraping_chatbot({
-        linkList: linkList,
-        chatbot_id: chatbot_id,
+        linkList,
+        chatbot_id,
         is_create: false,
-        chatbot_name: chatbot_name,
+        chatbot_name: chatbot_name.value,
       })
         .then((result) => {
-          console.log(result);
+          console.log("Rechatbot result>>", result);
         })
         .catch((err) => {
-          console.log(err);
+          console.log("Rechatbot err>>", err);
         });
     }
   };
-
   return (
     <Fragment>
       <Head>
