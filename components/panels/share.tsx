@@ -89,7 +89,7 @@ const Share = () => {
         if (check) {
           setLink("https://tonomyai.netlify.app/settings");
         } else {
-          setLink("https://tonomyai.netlify.app/chatbot-iframe/" + chatbot_id);
+          setLink("http://localhost:3000/chatbot-iframe/" + chatbot_id);
         }
       })
       .catch((err) => {

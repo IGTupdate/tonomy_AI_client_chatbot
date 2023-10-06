@@ -64,16 +64,16 @@
 //     }
 //   }, [chat_id, chatbotId, id, messages]);
 
-//   // const handleChatResponse = (_message: any, answer: any, chat_id: any) => {
-//   //   (document.getElementById("loading") as HTMLInputElement).style.display =
-//   //     "none";
-//   //   setMessages([...messages, ...[{ content: answer, role: "assistant" }]]);
-//   //   setChatId(chat_id);
-//   //   setInputMessage("");
-//   //   setIsFetching(false);
-//   //   (document.getElementById("loading") as HTMLInputElement).style.display =
-//   //     "none";
-//   // };
+/**const handleChatResponse = (_message: any, answer: any, chat_id: any) => {
+  (document.getElementById("loading") as HTMLInputElement).style.display =
+    "none";
+  setMessages([...messages, ...[{ content: answer, role: "assistant" }]]);
+  setChatId(chat_id);
+  setInputMessage("");
+  setIsFetching(false);
+  (document.getElementById("loading") as HTMLInputElement).style.display =
+    "none";
+};**/
 
 //   const handleChatResponse = useCallback(
 //     (_message: any, answer: any, chat_id: any) => {
@@ -290,17 +290,23 @@ const Chatbot = () => {
   const [logList, setLogList] = useState<any[]>([]);
 
   useEffect(() => {
-    const id: any = router.query.chatbotId;
+    // const id: any = router?.query?.chatbotId;
+    var url = window.location.href;
+    var parts = url.split("/");
+    var id = parts[parts.length - 1];
 
-    fetch(`${base_url}/api/chats?id=${id}&chat_id=${id}`)
-      .then(async (response) => await response.json())
-      .then((data) => setMessages((prevMessages) => [...prevMessages, ...data]))
-      .then((data) =>
-        console.log(`%c ${data}`, "background: #222; color: green")
-      )
-      .catch((error) =>
-        console.log(`%c ${error}`, "background: #222; color: red")
-      );
+
+    // fetch(`${base_url}/chats?id=${id}&chat_id=${id}`)
+    //   .then(async (response) => await response.json())
+    //   .then((data) => {
+    //     setMessages((prevMessages) => [...prevMessages, ...data]);
+    //   })
+    //   .then((data) =>
+    //     console.log(`%c ${data}`, "background: #222; color: green")
+    //   )
+    //   .catch((error) =>
+    //     console.log(`%c ${error}`, "background: #222; color: red")
+    //   );
 
     document
       .getElementById("input1")
@@ -445,13 +451,6 @@ const Chatbot = () => {
           </div>
 
           {loading ? (
-            // <Typewriter
-            //   options={{
-            //     strings: [`${resp}`],
-            //     autoStart: true,
-            //     loop: true,
-            //   }}
-            // />
             <Image src={loader} width={200} height={200} alt="loading" />
           ) : null}
         </div>
