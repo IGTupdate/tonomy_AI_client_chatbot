@@ -9,21 +9,17 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-const base_url = process.env.NEXT_PUBLIC_BASE_URL;
 
 const Chatbot = () => {
   const router = useRouter();
+  const chatbot_id = router.query.chatbotId;
 
   const [chat_id, setChatId] = useState("");
 
-  const chatbot_id = router.query.chatbotId;
-
   // const chatbot_id = useAppSelector((state) => state.getSetting.chatbot_id);
   const [logList, setLogList] = useState<any[]>([]);
-
   const [inputMessage, setInputMessage] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-
   const [loading, setLoading] = useState(false);
 
   const req_qa_box = useRef<HTMLDivElement | null>(null);
@@ -67,7 +63,6 @@ const Chatbot = () => {
     chat_id: string
   ) => {
     setLoading(false);
-
     setMessages((prevMessages) => [
       ...prevMessages,
       { content: answer, role: "assistant" },
@@ -146,27 +141,20 @@ const Chatbot = () => {
   };
 
   useEffect(() => {
-    // console.log("chatbot_idVVVVVVVVVVVLLLLL", chatbot_id);
-
     getDashboardInfo({ chatbot_id: chatbot_id })
-      .then((res) => {
-        const data = res.data.data;
-        setLogList(data.conversations);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then((res) => setLogList(res?.data?.data?.conversations))
+      .catch((err) => console.log(err));
   }, [chatbot_id]);
 
   useEffect(() => {
     logList.map((item) => {
       get_conversation({ id: item?.Id })
-        .then((res) => setMessages((prevMessages) => [...res.data.data]))
+        .then((res) => {
+          setMessages((prevMessages) => [...res?.data?.data]);
+        })
         .catch((err) => console.error("error", err));
     });
   }, [logList]);
-
-  // console.log("vvvvvvvvvvvvvvvvvvvvvvvvrrrrrrrrRRRv", messages);
 
   return (
     <div id="chatdemo-container">

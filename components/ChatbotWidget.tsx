@@ -1,13 +1,11 @@
 //components/ChatbotWidget
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Image from "next/image";
 import chatIcon from "../assets/imges/pngegg.png";
 import Chatbot from "../components/panels/chatbotdemo";
 
 const ChatbotWidget = (id: any) => {
-  console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv", id);
-
   const [showSettings, setShowSettings] = useState(false);
   const [selectedElement, setSelectedElement] = useState("");
 
